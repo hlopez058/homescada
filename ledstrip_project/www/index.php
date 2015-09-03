@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>R.Pi LED Controller</title>
+    <title>R.Pi SCADA Controller</title>
 
     <!-- Bootstrap -->
     <link href="bootswatch.css" rel="stylesheet">
@@ -26,11 +26,34 @@
         <script src="libraries/tinycolor.js"></script>
  </head>
   <body>
-    <h1>LED Controller</h1>
-
 
 <script>
+function OnWrite() {
+
+  var uri = "http://192.168.0.9/write"
+  var res = encodeURI(uri);
+  var ajaxurl = res;
+
+  //Json object
+  data =  {'action':'write','pin':'13','set':'1'} ;
+  
+
+  $.post(ajaxurl, data, function (response) {
+      // Response div goes here.
+      document.getElementById("write_response").innerHTML = response;
+  });
+}
+</script>
+<h1>Connected Devices</h1>
+<div class="btn-group" role="group" aria-label="...">
+  <button id="send-write" onclick="OnWrite()"type="submit" name="send-write" class="btn btn-default" value="w-13">Write</button>
+</div>
+<div id="write_response"></div>
+
+<h1>LED Controller</h1>
+<script>
 $(document).ready(function(){
+   
     $('.btn').click(function(){
         var clickBtnValue = $(this).val();
         var ajaxurl = 'ajax.php',
@@ -40,12 +63,12 @@ $(document).ready(function(){
             // Response div goes here.
         });
     });    
+
 });
 </script>
 
 <script>
     $(".rgb-demo").ColorPickerSliders({
-
     });
 </script>
 
@@ -79,10 +102,8 @@ $(document).ready(function(){
 
 
 <div class="btn-group" role="group" aria-label="...">
-
   <button type="submit" name="ON" class="btn btn-default" value="ON">ON</button>
   <button type="submit" name="OFF" class="btn btn-default" value="OFF">OFF</button>
-
 </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
